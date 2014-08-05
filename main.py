@@ -15,6 +15,7 @@ class Game(object):
         self.background = pygame.Surface(self.screen.get_size()).convert()  
         self.clock = pygame.time.Clock()
         self.fps = fps
+        self.wave = 0
 
     def run(self):
 
@@ -44,6 +45,9 @@ class Game(object):
             foes.draw(self.screen)
 
             self.check_for_collision(player, entities, foes)
+            if len(foes) == 1:
+                #Generate more enemies.
+                self.generate_foes(foes, player, 10, self.width, self.height)
 
             pygame.display.flip()
 
@@ -65,6 +69,9 @@ class Game(object):
                     bullet.kill()
 
     def generate_foes(self, foes, player, count, width, height):
+
+        #Add more stronger enemies with waves
+        self.wave += 1
 
         h_range = range(-200, 0) + range(height, height + 200)
         w_range = range(-200, 0) + range(width, width + 200)
