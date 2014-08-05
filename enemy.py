@@ -7,10 +7,12 @@ from player import Player
 class Enemy(pygame.sprite.Sprite):
 
     __speed__  = 2
-    __health__ = 1000
+    __health__ = 100
     __color__  = pygame.Color("#fff000")
     #Some aliens can shoot!
     __weapon__ = None
+    #Decreasing player health bar
+    __melee_damage__ = 10
     __score__  = 50
 
     def __init__(self, group, playerObj, pos = (0, 0)):

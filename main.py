@@ -49,7 +49,7 @@ class Game(object):
             foes.draw(self.screen)
 
             self.check_for_collision(player, entities, foes)
-            if len(foes) == 1:
+            if len(foes) <= 1:
                 #Generate more enemies.
                 self.generate_foes(foes, player, 10, self.width, self.height)
 

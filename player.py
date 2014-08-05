@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, group, bound):
         pygame.sprite.Sprite.__init__(self, group)
 
-        self.gun = Pistol(self, group)
+        self.gun = Shotgun(self, group)
 
         self.size = (32, 32)
         self.image = pygame.Surface(self.size)
@@ -33,6 +33,9 @@ class Player(pygame.sprite.Sprite):
             vector[1] = -1
         if keys[pygame.K_DOWN]:
             vector[1] = 1
+
+        #Tick for gun
+        self.gun.tick()
 
         mouse_key = pygame.mouse.get_pressed()
         if mouse_key == (1, 0, 0):
