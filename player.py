@@ -6,20 +6,20 @@ from common import *
 
 class Player(pygame.sprite.Sprite):
 
-    __speed__ = 5
+    __speed__ = 3.5
 
-    def __init__(self, group):
+    def __init__(self, group, bound):
         pygame.sprite.Sprite.__init__(self, group)
 
         self.gun = Pistol(self, group)
 
-        self.group = group
         self.size = (32, 32)
         self.image = pygame.Surface(self.size)
-        self.rect = pygame.Rect(0, 0, *self.size)
-        self.vector = (0, 0)
+        self.rect = pygame.Rect(bound.width / 2, bound.height / 2, *self.size)
         self.image.fill(pygame.Color("#00ffff"))
-        self.bound = None
+        self.vector = (0, 0)
+
+        self.bound = bound
 
     def update(self):
         #Change for action map

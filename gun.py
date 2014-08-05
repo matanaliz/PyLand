@@ -9,6 +9,7 @@ class Gun(object):
     #Default values
     __bullet_speed__ = 10
     __bullet_range__ = 1000
+    __fire_rate__    = 10
 
     def __init__(self, owner, group, BulletObj):
 
@@ -32,6 +33,7 @@ class Bullet(pygame.sprite.Sprite):
     #Should be for custom image
     __speed__    = 10
     __max_path__ = 1000
+    __damage__   = 15
     __size__     = (3, 3)
 
     def __init__(self, group, direction, pos=(0, 0)):
@@ -64,14 +66,19 @@ class Bullet(pygame.sprite.Sprite):
     def set_range(self, range):
         self.__max_path__ = range
 
+    def get_damage(self):
+        return self.__damage__
+
 
 class Pistol(Gun):
     __bullet_speed__ = 10
     __bullet_range__ = 1000
+
     def __init__(self, owner, group):
         Gun.__init__(self, owner, group, PistolBullet)
 
 class PistolBullet(Bullet):
-    __size__ = (3, 3)
+    __damage__  = 11
+    __size__    = (3, 3)
     def __init__(self, group, direction, pos=(0, 0)):
         Bullet.__init__(self, group, direction, pos)
