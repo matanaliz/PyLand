@@ -8,6 +8,10 @@ class Enemy(pygame.sprite.Sprite):
 
     __speed__  = 2
     __health__ = 1000
+    __color__  = pygame.Color("#fff000")
+    #Some aliens can shoot!
+    __weapon__ = None
+    __score__  = 50
 
     def __init__(self, group, playerObj, pos = (0, 0)):
         pygame.sprite.Sprite.__init__(self, group)
@@ -17,12 +21,15 @@ class Enemy(pygame.sprite.Sprite):
         self.size = (32, 32)
         self.image = pygame.Surface(self.size)
         self.rect = pygame.Rect(pos[0], pos[1], *self.size)
-        self.image.fill(pygame.Color("#fff000"))
+        self.image.fill(self.__color__)
 
         self.player = playerObj
 
     def get_pos(self):
         return self.rect.center
+
+    def get_score(self):
+        return self.__score__
 
     def update(self):
         direction = normalize(sub(self.player.rect.center, self.get_pos()))
@@ -33,5 +40,15 @@ class Enemy(pygame.sprite.Sprite):
             self.__health__ -= damage
             return False
         else:
-            self.kill()
             return True
+
+class YellowAlien(Enemy):
+
+    __speed__  = 1
+    __health__ = 500
+    __color__  = pygame.Color("#fff000")
+    __weapon__ = None
+    __score__  = 60
+
+    def __init__(self, group, playerObj, pos = (0, 0)):
+        Enemy.__init__(group, playerObj, pos)
