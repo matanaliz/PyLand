@@ -9,6 +9,7 @@ class Gun(object):
     #Default values
     __bullet_speed__ = 10
     __bullet_range__ = 1000
+    #Should consider something with fire rate
     __fire_rate__    = 10
 
     def __init__(self, owner, group, BulletObj):

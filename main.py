@@ -3,7 +3,7 @@ __author__ = 'matanaliz'
 import pygame
 import random
 from player import Player
-from enemy import Enemy
+from enemy import *
 
 class Game(object):
     def __init__(self, width=1280, height=720, fps=120):
@@ -25,12 +25,11 @@ class Game(object):
         entities = pygame.sprite.Group()
         foes = pygame.sprite.Group()
         player = Player(entities, self.screen.get_rect())
-        #Should add some levels. List of enemies
-        #enemy = Enemy(foes, player, (0, 0))
+
+        #Generatin enemies
         self.generate_foes(foes, player, 10, self.width, self.height)
 
         entities.add(player)
-        #foes.add(enemy)
 
         while True:
             event = pygame.event.poll()
@@ -63,6 +62,7 @@ class Game(object):
         if not pygame.sprite.spritecollideany(player, foes) == None:
             #GAME OVER or other mechanics
             self.display_gameover(self.screen)
+            #Should stop the game
             print "GAME OVER"
 
         else:
@@ -73,7 +73,6 @@ class Game(object):
                         #Add some score or other mechanics
                         self.score += foe.get_score()
                         foe.kill()
-                        print "Foe was killed"
                     else:
                         bullet.kill()
 
@@ -86,16 +85,19 @@ class Game(object):
         h_range = range(-200, 0) + range(height, height + 200)
         w_range = range(-200, 0) + range(width, width + 200)
 
+        #Adding more same enemies with waves
         for i in range(count + (self.wave * 2)):
             foes.add(Enemy(foes, player, (random.choice(h_range), random.choice(w_range))))
 
     def display_score(self, score, screen):
         score_text = self.font.render("Score: " + str(score), 1, (255, 255, 255))
+        #Bad idea
         screen.blit(score_text, (1000, 20))
 
     def display_gameover(self, screen):
         font = pygame.font.Font(None, 72)
         text = font.render("WASTED", 1, (255, 255, 255))
+        #Bad idea
         screen.blit(text, (640, 360))
 
 
