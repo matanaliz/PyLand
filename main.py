@@ -5,6 +5,7 @@ import random
 from player import Player
 from enemy import *
 
+
 class Game(object):
     def __init__(self, width=1280, height=720, fps=120):
         pygame.init()
@@ -12,7 +13,7 @@ class Game(object):
         self.width = width
         self.height = height
         self.screen = pygame.display.set_mode((width, height), pygame.DOUBLEBUF)
-        self.background = pygame.Surface(self.screen.get_size()).convert()  
+        self.background = pygame.Surface(self.screen.get_size()).convert()
         self.clock = pygame.time.Clock()
         self.fps = fps
         self.wave = 0
@@ -40,7 +41,7 @@ class Game(object):
             self.clock.tick(self.fps)
             self.screen.fill(pygame.Color("#000000"))
 
-            self.display_score(self.score, self.screen)
+            self.display_score(self.score)
 
             entities.update()
             entities.draw(self.screen)
@@ -57,25 +58,26 @@ class Game(object):
 
         pygame.quit()
 
+    #TODO: Move to entities
     def check_for_collision(self, player, entities, foes):
         #Check player collision
-        if not pygame.sprite.spritecollideany(player, foes) == None:
+        if pygame.sprite.spritecollideany(player, foes) is not None:
             #GAME OVER or other mechanics
-            self.display_gameover(self.screen)
-            #Should stop the game
-            print "GAME OVER"
+            self.display_gameover()
 
         else:
-            coll_dict = pygame.sprite.groupcollide(entities, foes, False, False)
-            for bullet, foes in coll_dict.iteritems():
+            collision_dict = pygame.sprite.groupcollide(entities, foes, False, False)
+            for bullet, foes in collision_dict.iteritems():
                 for foe in foes:
                     if foe.apply_damage(bullet.get_damage()):
                         #Add some score or other mechanics
                         self.score += foe.get_score()
                         foe.kill()
-                    else:
-                        bullet.kill()
 
+                    #Bullet is removed if was collided
+                    bullet.kill()
+
+    #TODO: Move to entities
     def generate_foes(self, foes, player, count, width, height):
 
         #Add more stronger enemies with waves
@@ -89,16 +91,16 @@ class Game(object):
         for i in range(count + (self.wave * 2)):
             foes.add(Enemy(foes, player, (random.choice(h_range), random.choice(w_range))))
 
-    def display_score(self, score, screen):
+    def display_score(self, score):
         score_text = self.font.render("Score: " + str(score), 1, (255, 255, 255))
-        #Bad idea
-        screen.blit(score_text, (1000, 20))
+        #TODO: Bad idea. Later: why? Comment more clearly
+        self.screen.blit(score_text, (1000, 20))
 
-    def display_gameover(self, screen):
+    def display_gameover(self):
         font = pygame.font.Font(None, 72)
         text = font.render("WASTED", 1, (255, 255, 255))
-        #Bad idea
-        screen.blit(text, (640, 360))
+        #TODO: Bad idea. Later: why? Comment more clearly
+        self.screen.blit(text, (640, 360))
 
 
 if __name__ == '__main__':

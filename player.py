@@ -4,14 +4,14 @@ import pygame
 from gun import *
 from common import *
 
-class Player(pygame.sprite.Sprite):
 
+class Player(pygame.sprite.Sprite):
     __speed__ = 3.5
 
     def __init__(self, group, bound):
         pygame.sprite.Sprite.__init__(self, group)
 
-        self.gun = Shotgun(self, group)
+        self.weapon = Shotgun(self, group)
 
         self.size = (32, 32)
         self.image = pygame.Surface(self.size)
@@ -22,7 +22,7 @@ class Player(pygame.sprite.Sprite):
         self.bound = bound
 
     def update(self):
-        #Change for action map
+        #TODO: Change for action map
         keys = pygame.key.get_pressed()
         vector = [0, 0]
         if keys[pygame.K_LEFT]:
@@ -35,12 +35,11 @@ class Player(pygame.sprite.Sprite):
             vector[1] = 1
 
         #Tick for gun
-        self.gun.tick()
-
+        self.weapon.tick()
         mouse_key = pygame.mouse.get_pressed()
         if mouse_key == (1, 0, 0):
             mouse_pos = pygame.mouse.get_pos()
-            self.gun.fire(mouse_pos)
+            self.weapon.fire(mouse_pos)
 
         self.rect.move_ip(*[x * self.__speed__ for x in vector])
         self.rect.clamp_ip(self.bound)

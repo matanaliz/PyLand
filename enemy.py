@@ -4,28 +4,29 @@ import pygame
 from common import *
 from player import Player
 
-class Enemy(pygame.sprite.Sprite):
 
-    __speed__  = 2
+class Enemy(pygame.sprite.Sprite):
+    __speed__ = 2
     __health__ = 100
-    __color__  = pygame.Color("#fff000")
+    __color__ = pygame.Color("#fff000")
     #Some aliens can shoot!
+    #TODO Give weapons to aliens
     __weapon__ = None
     #Decreasing player health bar
     __melee_damage__ = 10
-    __score__  = 50
+    __score__ = 50
 
-    def __init__(self, group, playerObj, pos = (0, 0)):
+    def __init__(self, group, player_obj, pos=(0, 0)):
         pygame.sprite.Sprite.__init__(self, group)
 
-        assert isinstance(playerObj, Player)
+        assert isinstance(player_obj, Player)
 
         self.size = (32, 32)
         self.image = pygame.Surface(self.size)
         self.rect = pygame.Rect(pos[0], pos[1], *self.size)
         self.image.fill(self.__color__)
 
-        self.player = playerObj
+        self.player = player_obj
 
     def get_pos(self):
         return self.rect.center
@@ -44,13 +45,13 @@ class Enemy(pygame.sprite.Sprite):
         else:
             return True
 
+
 class YellowAlien(Enemy):
-
-    __speed__  = 1
+    __speed__ = 1
     __health__ = 500
-    __color__  = pygame.Color("#fff000")
+    __color__ = pygame.Color("#fff000")
     __weapon__ = None
-    __score__  = 60
+    __score__ = 60
 
-    def __init__(self, group, playerObj, pos = (0, 0)):
-        Enemy.__init__(group, playerObj, pos)
+    def __init__(self, group, player_obj, pos=(0, 0)):
+        Enemy.__init__(group, player_obj, pos)
