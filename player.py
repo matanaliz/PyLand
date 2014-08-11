@@ -1,7 +1,7 @@
 __author__ = 'matanaliz'
 
 import pygame
-from gun import *
+from weapon import *
 from common import *
 
 

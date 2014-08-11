@@ -11,13 +11,13 @@ class Bullet(pygame.sprite.Sprite):
     __speed__ = 10
     __max_path__ = 1000
     __damage__ = 15
-    __size__ = (3, 3)
+    __size__ = (4, 4)
 
     def __init__(self, group, direction, pos=(0, 0)):
         pygame.sprite.Sprite.__init__(self, group)
 
         self.image = pygame.Surface(self.__size__)
-        self.image.fill(pygame.Color("#ff0000"))
+        self.image.fill(pygame.Color("#ffcc00"))
 
         self.rect = pygame.Rect(pos, self.__size__)
         self.origin_center = self.rect.center

@@ -39,7 +39,7 @@ class Game(object):
                 break
 
             self.clock.tick(self.fps)
-            self.screen.fill(pygame.Color("#000000"))
+            self.screen.fill(pygame.Color("#3d863d"))
 
             self.display_score(self.score)
 
