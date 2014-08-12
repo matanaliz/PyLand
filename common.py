@@ -21,5 +21,6 @@ def magnitude(v):
 
 def normalize(v):
     mag = magnitude(v)
-    assert mag - 0.0 > EPS
+    if mag - 0.0 < EPS:
+        mag = EPS
     return [float(v[i]) / mag for i in range(len(v))]

@@ -8,25 +8,25 @@ from common import *
 class Bullet(pygame.sprite.Sprite):
 
     #TODO: Should be for custom image
-    __speed__ = 10.0
-    __max_path__ = 1000
-    __damage__ = 15
-    __size__ = (3, 3)
+    SPEED = 10.0
+    MAX_RANGE = 1000
+    DAMAGE = 15
+    SIZE = (3, 3)
 
     def __init__(self, group, direction, pos=(0, 0)):
         pygame.sprite.Sprite.__init__(self, group)
 
-        self.image = pygame.Surface(self.__size__)
+        self.image = pygame.Surface(self.SIZE)
         self.image.fill(pygame.Color("#ffcc00"))
 
-        self.rect = pygame.Rect(pos, self.__size__)
+        self.rect = pygame.Rect(pos, self.SIZE)
         self.origin_center = self.rect.center
         self.direction = direction
         self.new_pos = []
         self.path = 0
 
         self.age = 1
-        self.speed = self.__speed__ + random.uniform(-2.0, 2.0)
+        self.speed = self.SPEED + random.uniform(-1.0, 1.0)
 
     def update(self):
         self.age += 1
@@ -36,30 +36,30 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.center = add(self.origin_center, self.new_pos)
 
         #Cheching path or age
-        if self.path > self.__max_path__:
+        if self.path > self.MAX_RANGE:
             self.kill()
 
     def set_size(self, size):
         assert isinstance(size, object)
-        self.__size__ = size
+        self.SIZE = size
 
     def set_speed(self, speed):
-        self.__speed__ = speed
-        self.speed = self.__speed__ + random.uniform(-2.0, 2.0)
+        self.SPEED = speed
+        self.speed = self.SPEED + random.uniform(-2.0, 2.0)
 
     def set_range(self, max_path):
-        self.__max_path__ = max_path
+        self.MAX_RANGE = max_path
 
     def get_damage(self):
-        return self.__damage__
+        return self.DAMAGE
 
 
 class Weapon(object):
     #Speed and range can be different for different guns
     #Default values
     #TODO: Hide into bullet
-    __bullet_speed__ = 10
-    __bullet_range__ = 1000
+    BULLET_SPEED = 10
+    BULLET_RANGE = 1000
 
     #In ticks
     __reload_time__ = 100
@@ -90,8 +90,8 @@ class Weapon(object):
             direction = normalize(sub(where, self.get_pos()))
             #Creating bullet of custom class
             bullet = self.bullet_cls(self.bullet_group, direction, self.get_pos())
-            bullet.set_speed(self.__bullet_speed__)
-            bullet.set_range(self.__bullet_range__)
+            bullet.set_speed(self.BULLET_SPEED)
+            bullet.set_range(self.BULLET_RANGE)
             self.bullet_group.add(bullet)
 
     def can_shoot(self):
@@ -127,8 +127,8 @@ class Weapon(object):
 
 
 class PistolBullet(Bullet):
-    __damage__ = 60
-    __size__ = (3, 3)
+    DAMAGE = 60
+    SIZE = (3, 3)
 
     def __init__(self, group, direction, pos=(0, 0)):
         Bullet.__init__(self, group, direction, pos)
@@ -144,16 +144,16 @@ class Pistol(Weapon):
 
 
 class ShotgunBullet(Bullet):
-    __damage__ = 20
-    __size__ = (3, 3)
+    DAMAGE = 20
+    SIZE = (3, 3)
 
     def __init__(self, group, direction, pos=(0, 0)):
         Bullet.__init__(self, group, direction, pos)
 
 
 class Shotgun(Weapon):
-    __bullet_speed__ = 20
-    __bullet_range__ = 900
+    BULLET_SPEED = 18
+    BULLET_RANGE = 900
 
     def __init__(self, owner, group):
         Weapon.__init__(self, owner, group, ShotgunBullet)
@@ -173,6 +173,6 @@ class Shotgun(Weapon):
                 #Creating bullet of custom class
                 bullet = self.bullet_cls(self.bullet_group, direction, self.get_pos())
                 #??? Remove this from here
-                bullet.set_speed(self.__bullet_speed__)
-                bullet.set_range(self.__bullet_range__)
+                bullet.set_speed(self.BULLET_SPEED)
+                bullet.set_range(self.BULLET_RANGE)
                 self.bullet_group.add(bullet)

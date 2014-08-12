@@ -6,7 +6,8 @@ from common import *
 
 
 class Player(pygame.sprite.Sprite):
-    __speed__ = 3.5
+
+    SPEED = 3.5
 
     def __init__(self, group, bound):
         pygame.sprite.Sprite.__init__(self, group)
@@ -36,10 +37,11 @@ class Player(pygame.sprite.Sprite):
 
         #Tick for gun
         self.weapon.tick()
+
         mouse_key = pygame.mouse.get_pressed()
         if mouse_key == (1, 0, 0):
             mouse_pos = pygame.mouse.get_pos()
             self.weapon.fire(mouse_pos)
 
-        self.rect.move_ip(*[x * self.__speed__ for x in vector])
+        self.rect.move_ip(*[x * self.SPEED for x in vector])
         self.rect.clamp_ip(self.bound)
