@@ -8,7 +8,7 @@ from common import *
 class Bullet(pygame.sprite.Sprite):
 
     #TODO: Should be for custom image
-    __speed__ = 10
+    __speed__ = 10.0
     __max_path__ = 1000
     __damage__ = 15
     __size__ = (4, 4)
@@ -26,10 +26,11 @@ class Bullet(pygame.sprite.Sprite):
         self.path = 0
 
         self.age = 1
+        self.speed = self.__speed__ + random.uniform(-2.0, 2.0)
 
     def update(self):
         self.age += 1
-        self.new_pos = [x * self.__speed__ * self.age for x in self.direction]
+        self.new_pos = [x * self.speed * self.age for x in self.direction]
         self.path = magnitude(self.new_pos)
 
         self.rect.center = add(self.origin_center, self.new_pos)
@@ -39,10 +40,12 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
     def set_size(self, size):
+        assert isinstance(size, object)
         self.__size__ = size
 
     def set_speed(self, speed):
         self.__speed__ = speed
+        self.speed = self.__speed__ + random.uniform(-2.0, 2.0)
 
     def set_range(self, max_path):
         self.__max_path__ = max_path
