@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 __author__ = 'matanaliz'
 
-import pygame
 from weapon import *
-from common import *
+from event import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -22,6 +21,16 @@ class Player(pygame.sprite.Sprite):
         self.vector = (0, 0)
 
         self.bound = bound
+
+        self.event_dispatcher = 0
+
+    def set_event_dispatcher(self, event_dispatcher):
+        assert isinstance(event_dispatcher, EventDispatcher)
+        self.event_dispatcher = event_dispatcher
+
+        #Setting dispatcher for weapon
+        self.weapon.set_event_dispatcher(event_dispatcher)
+
 
     def update(self):
         #TODO: Change for action map

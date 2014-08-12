@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 __author__ = 'matanaliz'
 
-import pygame
+
 import random
-from player import Player
 from enemy import *
+from gui import Gui
+from event import *
 
 
 class Game(object):
@@ -22,11 +23,18 @@ class Game(object):
         self.font = pygame.font.Font(None, 30)
         self.score = 0
 
+        self.event_dispatch = EventDispatcher()
+
+        self.gui = Gui()
+        self.gui.set_event_dispatcher(self.event_dispatch)
+
     def run(self):
 
         entities = pygame.sprite.Group()
         foes = pygame.sprite.Group()
         player = Player(entities, self.screen.get_rect())
+        player.set_event_dispatcher(self.event_dispatch)
+
 
         #Generatin enemies
         self.generate_foes(foes, player, 10, self.width, self.height)
@@ -42,7 +50,7 @@ class Game(object):
             self.clock.tick(self.fps)
             self.screen.fill(pygame.Color("#3d863d"))
 
-            self.display_score(self.score)
+            self.gui.update_score(self.score)
 
             entities.update()
             entities.draw(self.screen)
@@ -91,11 +99,6 @@ class Game(object):
         #Adding more same enemies with waves
         for i in range(count + (self.wave * 2)):
             foes.add(Enemy(foes, player, (random.choice(h_range), random.choice(w_range))))
-
-    def display_score(self, score):
-        score_text = self.font.render("Score: " + str(score), 1, (255, 255, 255))
-        #TODO: Bad idea. Later: why? Comment more clearly
-        self.screen.blit(score_text, (1000, 20))
 
     def display_gameover(self):
         font = pygame.font.Font(None, 72)

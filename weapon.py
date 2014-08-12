@@ -4,6 +4,7 @@ __author__ = 'matanaliz'
 import pygame
 import random
 from common import *
+from event import *
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -41,6 +42,7 @@ class Bullet(pygame.sprite.Sprite):
             self.kill()
 
     def set_size(self, size):
+        #Size must be a tuple, not list or dict
         assert isinstance(size, object)
         self.SIZE = size
 
@@ -63,14 +65,14 @@ class Weapon(object):
     BULLET_RANGE = 1000
 
     #In ticks
-    __reload_time__ = 100
-    __bullet_reload_time__ = 50
+    RELOAD_TIME = 100
+    BULLET_RELOAD_TIME = 50
 
     #TODO: Add semi-auto weapon mode
-    __semi_auto__ = False
+    SEMI_AUTO_MODE = False
 
     #Capacity
-    __capacity__ = 10
+    CAPACITY = 10
 
     def __init__(self, owner, group, bullet_cls):
         #Fire rate and reload variables
@@ -86,6 +88,12 @@ class Weapon(object):
         #assert isinstance(bullet_cls, Bullet)
         self.bullet_cls = bullet_cls
 
+        self.event_dispatcher = 0
+
+    def set_event_dispatcher(self, event_dispatcher):
+        assert isinstance(event_dispatcher, EventDispatcher)
+        self.event_dispatcher = event_dispatcher
+
     def fire(self, where):
         if self.can_shoot():
             direction = normalize(sub(where, self.get_pos()))
@@ -96,27 +104,38 @@ class Weapon(object):
             self.bullet_group.add(bullet)
 
     def can_shoot(self):
-        if self.shots <= self.__capacity__:
+        if self.shots <= self.CAPACITY:
             if not self.bullet_reloading:
                 self.shots += 1
                 self.bullet_reloading = True
+
+                #Dispatch event that bullet was fired
+                if self.event_dispatcher:
+                    self.event_dispatcher.dispatch_event(GameEvent(GameEvent.AMMO_SHOT, self))
                 return True
             else:
                 return False
-        else:
+        elif not self.reloading:
             self.reloading = True
+
+            #Dispatching event to start reloading animation
+            if self.event_dispatcher:
+                self.event_dispatcher.dispatch_event(GameEvent(GameEvent.RELOAD_START, self))
             return False
+
+        return False
+
 
     def tick(self):
         if self.bullet_reloading:
-            if self.bullet_reload_timer < self.__bullet_reload_time__:
+            if self.bullet_reload_timer < self.BULLET_RELOAD_TIME:
                 self.bullet_reload_timer += 1
             else:
                 self.bullet_reload_timer = 0
                 self.bullet_reloading = False
 
         if self.reloading:
-            if self.reloading_timer < self.__reload_time__:
+            if self.reloading_timer < self.RELOAD_TIME:
                 self.reloading_timer += 1
             else:
                 self.shots = 0
