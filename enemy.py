@@ -48,6 +48,10 @@ class Enemy(pygame.sprite.Sprite):
         else:
             return True
 
+    def attack(self):
+        #TODO: Melee damage colldown
+        return self.MELEE_DAMAGE
+
 
 class YellowAlien(Enemy):
     SPEED = 1

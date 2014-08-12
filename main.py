@@ -58,6 +58,8 @@ class Game(object):
             foes.update()
             foes.draw(self.screen)
 
+            self.gui.update()
+
             self.check_for_collision(player, entities, foes)
             if len(foes) <= 1:
                 #Generate more enemies.
@@ -67,12 +69,13 @@ class Game(object):
 
         pygame.quit()
 
-    #TODO: Move to entities
+    #TODO: Move to entities. Check player for bullets.
     def check_for_collision(self, player, entities, foes):
         #Check player collision
-        if pygame.sprite.spritecollideany(player, foes) is not None:
-            #GAME OVER or other mechanics
-            self.display_gameover()
+        foe = pygame.sprite.spritecollideany(player, foes)
+        if foe is not None:
+            if player.apply_damage(foe.attack()):
+                self.display_gameover()
 
         else:
             collision_dict = pygame.sprite.groupcollide(entities, foes, False, False)

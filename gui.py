@@ -2,6 +2,8 @@
 __author__ = 'matanaliz'
 
 import pygame
+from weapon import Weapon
+from player import Player
 from event import *
 
 
@@ -18,9 +20,20 @@ class Gui(object):
         self.reloading_progress = ReloadingProgress()
         self.charger_clip = ChargerClip()
 
+        self.update_list = [
+            self.score,
+            self.health_bar,
+            self.reloading_progress,
+            self.charger_clip
+        ]
+
         self.event_dispatcher = 0
 
     def set_event_dispatcher(self, event_dispatcher):
+        """
+        Setting event dispatcher
+        :param event_dispatcher:
+        """
         assert isinstance(event_dispatcher, EventDispatcher)
         self.event_dispatcher = event_dispatcher
 
@@ -29,42 +42,60 @@ class Gui(object):
         self.event_dispatcher.add_event_listener(GameEvent.DAMAGE_GOT, self.health_bar.on_damage_got)
         self.event_dispatcher.add_event_listener(GameEvent.AMMO_SHOT, self.charger_clip.on_ammo_shot)
 
-    def change_font(self, new_font):
-        """
-        Changes font on new one
-        :param new_font:
-        """
-
-    def set_weapon_listener(self, weapon_listener):
-        """
-
-        :param weapon_listener:
-        """
-        pass
-
-    def set_health_listener(self, health_listener):
-        pass
-
     def update_score(self, score):
-        self.score.display_score(score)
+        """
+        Renders new score on screen
+        :param score:
+        """
+        #Lol. Such a shame. Should clear this up.
+        self.score.score = score
+
+    def update(self):
+        #Update all
+        for obj in self.update_list:
+            obj.update()
 
 
 class Score(object):
+    """
+    Class that represents score object
+    """
     def __init__(self, common_font):
         assert isinstance(common_font, pygame.font.Font)
         self.font = common_font
+        self.score = 0
 
-    def display_score(self, score):
-        score_text = self.font.render(str(score), 1, (255, 255, 255))
+    def update(self):
+        """
+        Renders new score on screen
+        :param score:
+        """
+        score_text = self.font.render(str(self.score), 1, (255, 255, 255))
         pygame.display.get_surface().blit(score_text, (1000, 20))
-
 
 class HealthBar(object):
     def __init__(self):
-        pass
+        self.size = (200, 50)
+        self.image = pygame.Surface(self.size)
+        self.image.fill(pygame.Color("#ffffff"))
+
+        self.max_health = 0
 
     def on_damage_got(self, event):
-        pass
+        assert isinstance(event, GameEvent)
+        assert isinstance(event.data, Player)
+
+        if not self.max_health:
+            self.max_health = event.data.MAX_HEALTH
+
+        curr_width = int(self.size[0] * event.data.curr_health / self.max_health)
+        print curr_width
+        self.image = pygame.Surface((curr_width, self.size[1]))
+        #TODO change color with health percentage
+        self.image.fill(pygame.Color("#ffffff"))
+
+    def update(self):
+        pygame.display.get_surface().blit(self.image, (5, 5))
 
 
 class ReloadingProgress(object):
@@ -79,18 +110,23 @@ class ReloadingProgress(object):
 
     def update(self):
         """
-        Updates reloading sprite (sidedar with percetage)
+        Updates reloading sprite (sidebar with percentage)
         """
         pass
 
     def on_reload_start(self, event):
-        print 'reload start'
+        """
+        Event handler method
+        :param event: event from weapon
+        """
+        assert isinstance(event, GameEvent)
+        assert isinstance(event.data, Weapon)
 
 
 class ChargerClip(object):
     """
-Visualisation of remaining ammo in clip
-"""
+    Visualisation of remaining ammo in clip
+    """
 
     def __init__(self):
         pass
@@ -99,4 +135,6 @@ Visualisation of remaining ammo in clip
         pass
 
     def on_ammo_shot(self, event):
-        print 'shot!'
+        assert isinstance(event, GameEvent)
+        assert isinstance(event.data, Weapon)
+
