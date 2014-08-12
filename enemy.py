@@ -1,4 +1,4 @@
-__author__ = 'oleksandr.kaspruk'
+__author__ = 'matanaliz'
 
 import pygame
 from common import *
@@ -6,7 +6,9 @@ from player import Player
 
 
 class Enemy(pygame.sprite.Sprite):
+    #TODO Speed changes with damage or other mechanics
     __speed__ = 2
+    #TODO Add health bar for enemies
     __health__ = 100
     __color__ = pygame.Color("#fff000")
     #Some aliens can shoot!

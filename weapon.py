@@ -11,7 +11,7 @@ class Bullet(pygame.sprite.Sprite):
     __speed__ = 10.0
     __max_path__ = 1000
     __damage__ = 15
-    __size__ = (4, 4)
+    __size__ = (3, 3)
 
     def __init__(self, group, direction, pos=(0, 0)):
         pygame.sprite.Sprite.__init__(self, group)
@@ -144,7 +144,7 @@ class Pistol(Weapon):
 
 
 class ShotgunBullet(Bullet):
-    __damage__ = 90
+    __damage__ = 20
     __size__ = (3, 3)
 
     def __init__(self, group, direction, pos=(0, 0)):
@@ -152,19 +152,19 @@ class ShotgunBullet(Bullet):
 
 
 class Shotgun(Weapon):
-    __bullet_speed__ = 15
-    __bullet_range__ = 800
+    __bullet_speed__ = 20
+    __bullet_range__ = 900
 
     def __init__(self, owner, group):
         Weapon.__init__(self, owner, group, ShotgunBullet)
 
         #May be misunderstanding. This is how many shots will be produced in one shot by shotgun
-        self.__shots_count = 7
+        self.__shots_count = 15
 
     def fire(self, where):
         where_list = []
         for _ in range(self.__shots_count):
-            where_list.append((where[0] + random.randint(-50, 50), where[1] + random.randint(-50, 50)))
+            where_list.append((where[0] + random.randint(-20, 20), where[1] + random.randint(-20, 20)))
 
         direct_list = [normalize(sub(where, self.get_pos())) for where in where_list]
 

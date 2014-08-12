@@ -1,4 +1,4 @@
-__author__ = 'matan'
+__author__ = 'matanaliz'
 
 
 class Gui(object):
@@ -25,6 +25,11 @@ class Gui(object):
 
 class Score(object):
     def __init__(self, common_font):
+        pass
+
+
+class HealthBar(object):
+    def __init__(self, health_listener):
         pass
 
 
