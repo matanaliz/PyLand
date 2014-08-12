@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 __author__ = 'matanaliz'
 
-
-import random
-from enemy import *
 from gui import Gui
-from event import *
+from entities import *
 
 
 class Game(object):
@@ -25,22 +22,15 @@ class Game(object):
 
         self.event_dispatch = EventDispatcher()
 
+        #Init all user interface staff
         self.gui = Gui()
         self.gui.set_event_dispatcher(self.event_dispatch)
 
+        #Init all entities
+        self.entities = Entities()
+        self.entities.set_event_dispatcher(self.event_dispatch)
+
     def run(self):
-
-        entities = pygame.sprite.Group()
-        foes = pygame.sprite.Group()
-        player = Player(entities, self.screen.get_rect())
-        player.set_event_dispatcher(self.event_dispatch)
-
-
-        #Generatin enemies
-        self.generate_foes(foes, player, 10, self.width, self.height)
-
-        entities.add(player)
-
         while True:
             event = pygame.event.poll()
 
@@ -50,58 +40,12 @@ class Game(object):
             self.clock.tick(self.fps)
             self.screen.fill(pygame.Color("#3d863d"))
 
-            self.gui.update_score(self.score)
-
-            entities.update()
-            entities.draw(self.screen)
-
-            foes.update()
-            foes.draw(self.screen)
-
             self.gui.update()
-
-            self.check_for_collision(player, entities, foes)
-            if len(foes) <= 1:
-                #Generate more enemies.
-                self.generate_foes(foes, player, 10, self.width, self.height)
+            self.entities.update()
 
             pygame.display.flip()
 
         pygame.quit()
-
-    #TODO: Move to entities. Check player for bullets.
-    def check_for_collision(self, player, entities, foes):
-        #Check player collision
-        foe = pygame.sprite.spritecollideany(player, foes)
-        if foe is not None:
-            if player.apply_damage(foe.attack()):
-                self.display_gameover()
-
-        else:
-            collision_dict = pygame.sprite.groupcollide(entities, foes, False, False)
-            for bullet, foes in collision_dict.iteritems():
-                for foe in foes:
-                    if foe.apply_damage(bullet.get_damage()):
-                        #Add some score or other mechanics
-                        self.score += foe.get_score()
-                        foe.kill()
-
-                    #Bullet is removed if was collided
-                    bullet.kill()
-
-    #TODO: Move to entities
-    def generate_foes(self, foes, player, count, width, height):
-
-        #Add more stronger enemies with waves
-        self.wave += 1
-
-        #Generating enemies out of screen
-        h_range = range(-200, 0) + range(height, height + 200)
-        w_range = range(-200, 0) + range(width, width + 200)
-
-        #Adding more same enemies with waves
-        for i in range(count + (self.wave * 2)):
-            foes.add(Enemy(foes, player, (random.choice(h_range), random.choice(w_range))))
 
     def display_gameover(self):
         font = pygame.font.Font(None, 72)

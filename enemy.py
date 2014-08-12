@@ -7,6 +7,9 @@ from player import Player
 
 
 class Enemy(pygame.sprite.Sprite):
+    """
+    Base enemy class
+    """
     #TODO Speed changes with damage or other mechanics
     SPEED = 2
     #TODO Add health bar for enemies

@@ -41,14 +41,7 @@ class Gui(object):
         self.event_dispatcher.add_event_listener(GameEvent.RELOAD_START, self.reloading_progress.on_reload_start)
         self.event_dispatcher.add_event_listener(GameEvent.DAMAGE_GOT, self.health_bar.on_damage_got)
         self.event_dispatcher.add_event_listener(GameEvent.AMMO_SHOT, self.charger_clip.on_ammo_shot)
-
-    def update_score(self, score):
-        """
-        Renders new score on screen
-        :param score:
-        """
-        #Lol. Such a shame. Should clear this up.
-        self.score.score = score
+        self.event_dispatcher.add_event_listener(GameEvent.SCORE_GOT, self.score.on_score_got)
 
     def update(self):
         #Update all
@@ -65,13 +58,17 @@ class Score(object):
         self.font = common_font
         self.score = 0
 
+    def on_score_got(self, event):
+        assert isinstance(event.data, object)
+        self.score += event.data
+
     def update(self):
         """
         Renders new score on screen
-        :param score:
         """
         score_text = self.font.render(str(self.score), 1, (255, 255, 255))
         pygame.display.get_surface().blit(score_text, (1000, 20))
+
 
 class HealthBar(object):
     def __init__(self):
@@ -119,8 +116,10 @@ class ReloadingProgress(object):
         Event handler method
         :param event: event from weapon
         """
+        #TODO Implement
         assert isinstance(event, GameEvent)
         assert isinstance(event.data, Weapon)
+
 
 
 class ChargerClip(object):
@@ -135,6 +134,6 @@ class ChargerClip(object):
         pass
 
     def on_ammo_shot(self, event):
+        #TODO Implement
         assert isinstance(event, GameEvent)
         assert isinstance(event.data, Weapon)
-

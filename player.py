@@ -15,9 +15,6 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, group, bound):
         pygame.sprite.Sprite.__init__(self, group)
 
-        #Weapon init
-        self.weapon = Shotgun(self, group)
-
         #Sprite init
         self.size = (32, 32)
         self.image = pygame.Surface(self.size)
@@ -31,6 +28,10 @@ class Player(pygame.sprite.Sprite):
 
         #Health init
         self.curr_health = self.MAX_HEALTH
+
+    def give_weapon(self, weapon):
+        assert isinstance(weapon, Weapon)
+        self.weapon = weapon
 
     def set_event_dispatcher(self, event_dispatcher):
         """

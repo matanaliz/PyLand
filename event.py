@@ -111,4 +111,5 @@ class GameEvent(Event):
     RELOAD_END = 'RELOAD_END'
     DAMAGE_GOT = 'DAMAGE_GOT'
     AMMO_SHOT = 'AMMO_SHOT'
+    SCORE_GOT = 'SCORE_GOT'
 
