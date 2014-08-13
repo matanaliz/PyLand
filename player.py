@@ -12,8 +12,8 @@ class Player(pygame.sprite.Sprite):
     SPEED = 3.5
     MAX_HEALTH = 100
 
-    def __init__(self, group, bound):
-        pygame.sprite.Sprite.__init__(self, group)
+    def __init__(self, bound):
+        pygame.sprite.Sprite.__init__(self)
 
         #Sprite init
         self.size = (32, 32)

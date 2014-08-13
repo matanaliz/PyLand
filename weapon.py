@@ -15,8 +15,8 @@ class Bullet(pygame.sprite.Sprite):
     DAMAGE = 15
     SIZE = (3, 3)
 
-    def __init__(self, group, direction, pos=(0, 0)):
-        pygame.sprite.Sprite.__init__(self, group)
+    def __init__(self, direction, pos=(0, 0)):
+        pygame.sprite.Sprite.__init__(self)
 
         self.image = pygame.Surface(self.SIZE)
         self.image.fill(pygame.Color("#ffcc00"))
@@ -167,8 +167,8 @@ class ShotgunBullet(Bullet):
     DAMAGE = 20
     SIZE = (3, 3)
 
-    def __init__(self, group, direction, pos=(0, 0)):
-        Bullet.__init__(self, group, direction, pos)
+    def __init__(self, direction, pos=(0, 0)):
+        Bullet.__init__(self, direction, pos)
 
 
 class Shotgun(Weapon):
@@ -191,7 +191,7 @@ class Shotgun(Weapon):
         if self.can_shoot():
             for direction in direct_list:
                 #Creating bullet of custom class
-                bullet = self.bullet_cls(self.bullet_group, direction, self.get_pos())
+                bullet = self.bullet_cls(direction, self.get_pos())
                 #??? Remove this from here
                 bullet.set_speed(self.BULLET_SPEED)
                 bullet.set_range(self.BULLET_RANGE)

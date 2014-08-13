@@ -22,8 +22,8 @@ class Enemy(pygame.sprite.Sprite):
     MELEE_DAMAGE = 10
     BOUNTY = 42
 
-    def __init__(self, group, player_obj, pos=(0, 0)):
-        pygame.sprite.Sprite.__init__(self, group)
+    def __init__(self, player_obj, pos=(0, 0)):
+        pygame.sprite.Sprite.__init__(self)
 
         assert isinstance(player_obj, Player)
 

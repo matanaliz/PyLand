@@ -24,10 +24,11 @@ class Entities(object):
         self.count = 10
         self.wave = 0
 
-        self.player = Player(self.player_group, pygame.display.get_surface().get_rect())
+        self.player = Player(pygame.display.get_surface().get_rect())
         #TODO pass player position, not whole
         weapon = Shotgun(self.player, self.bullet_group)
         self.player.give_weapon(weapon)
+        self.player_group.add(self.player)
 
         self.event_dispatcher = 0
 
@@ -52,7 +53,7 @@ class Entities(object):
         #Adding more same enemies with waves
         for i in range(self.count + (self.wave * 2)):
             self.foe_group.add(
-                Enemy(self.foe_group, self.player, (random.choice(h_range), random.choice(w_range))))
+                Enemy(self.player, (random.choice(h_range), random.choice(w_range))))
 
     def check_for_collision(self):
         #Check player collision
