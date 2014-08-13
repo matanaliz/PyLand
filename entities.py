@@ -40,6 +40,9 @@ class Entities(object):
         assert isinstance(event_dispatcher, EventDispatcher)
         self.event_dispatcher = event_dispatcher
 
+        #Apply event dispatcher for all other
+        self.player.set_event_dispatcher(event_dispatcher)
+
     def generate_foes(self):
         #Add more stronger enemies with waves
         self.wave += 1

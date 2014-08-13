@@ -81,7 +81,6 @@ class Player(pygame.sprite.Sprite):
         """
         if self.curr_health > damage:
             self.curr_health -= damage
-
             #Dispatch event to health bar
             if self.event_dispatcher:
                 self.event_dispatcher.dispatch_event(GameEvent(GameEvent.DAMAGE_GOT, self))
