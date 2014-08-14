@@ -25,3 +25,7 @@ def normalize(v):
     if mag - 0.0 < EPS:
         mag = EPS
     return [float(v[i]) / mag for i in range(len(v))]
+
+def angle(v):
+    assert len(v) == 2
+    return math.atan2(v[0], v[1]) * 180 / math.pi

@@ -3,6 +3,7 @@ __author__ = 'matanaliz'
 
 from weapon import *
 from event import *
+from common import *
 
 
 class Player(pygame.sprite.Sprite):
@@ -16,10 +17,14 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         #Sprite init
-        self.size = (32, 32)
+        self.size = (32, 10)
         self.image = pygame.Surface(self.size)
-        self.rect = pygame.Rect(bound.width / 2, bound.height / 2, *self.size)
         self.image.fill(pygame.Color("#00ffff"))
+        #Saving base image for rotation
+        self.base_image = self.image
+
+        self.rect = pygame.Rect(bound.width / 2, bound.height / 2, *self.size)
+
         self.vector = (0, 0)
         self.bound = bound
 
@@ -28,6 +33,8 @@ class Player(pygame.sprite.Sprite):
 
         #Health init
         self.curr_health = self.MAX_HEALTH
+
+        self.weapon = 0
 
     def give_weapon(self, weapon):
         assert isinstance(weapon, Weapon)
@@ -65,10 +72,14 @@ class Player(pygame.sprite.Sprite):
         #Tick for gun
         self.weapon.tick()
 
+        #Rotating player to face cursor
+        mouse_pos = pygame.mouse.get_pos()
+        self.__rotate(angle(normalize(sub(self.rect.center, mouse_pos))))
+
         mouse_key = pygame.mouse.get_pressed()
         if mouse_key == (1, 0, 0):
-            mouse_pos = pygame.mouse.get_pos()
-            self.weapon.fire(mouse_pos)
+            if self.weapon:
+                self.weapon.fire(mouse_pos)
 
         self.rect.move_ip(*[x * self.SPEED for x in vector])
         self.rect.clamp_ip(self.bound)
@@ -87,3 +98,13 @@ class Player(pygame.sprite.Sprite):
             return False
         else:
             return True
+
+    def __rotate(self, angle):
+        """rotate an image while keeping its center and size"""
+        old_center = self.rect.center
+
+        self.image = pygame.transform.rotate(self.base_image, angle)
+        self.rect = self.image.get_rect()
+        self.rect.center = old_center
+        print self.image
+        print self.rect
