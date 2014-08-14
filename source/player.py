@@ -17,9 +17,15 @@ class Player(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
 
         #Sprite init
-        self.size = (32, 10)
+        self.size = (32, 32)
         self.image = pygame.Surface(self.size)
-        self.image.fill(pygame.Color("#00ffff"))
+        #self.image.fill((0, 0, 0))
+
+        #Transparent surface
+        #self.image = pygame.Surface(self.size, pygame.SRCALPHA, 32)
+        #self.image.convert_alpha()
+
+        pygame.draw.rect(self.image, pygame.Color("#00ffff"), pygame.Rect(8, 8, 32, 24))
         #Saving base image for rotation
         self.base_image = self.image
 
