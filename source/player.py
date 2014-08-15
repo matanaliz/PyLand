@@ -18,14 +18,14 @@ class Player(pygame.sprite.Sprite):
 
         #Sprite init
         self.size = (32, 32)
-        self.image = pygame.Surface(self.size)
+        #self.image = pygame.Surface(self.size)
         #self.image.fill((0, 0, 0))
 
         #Transparent surface
-        #self.image = pygame.Surface(self.size, pygame.SRCALPHA, 32)
-        #self.image.convert_alpha()
+        self.image = pygame.Surface(self.size, pygame.SRCALPHA, 32)
+        self.image.convert_alpha()
 
-        pygame.draw.rect(self.image, pygame.Color("#00ffff"), pygame.Rect(8, 8, 32, 24))
+        pygame.draw.rect(self.image, pygame.Color("#00ffff"), pygame.Rect(0, 0, 32, 24))
         #Saving base image for rotation
         self.base_image = self.image
 
@@ -107,10 +107,7 @@ class Player(pygame.sprite.Sprite):
 
     def __rotate(self, angle):
         """rotate an image while keeping its center and size"""
-        old_center = self.rect.center
-
+        orig_rect = self.rect
         self.image = pygame.transform.rotate(self.base_image, angle)
         self.rect = self.image.get_rect()
-        self.rect.center = old_center
-        print self.image
-        print self.rect
+        self.rect.center = orig_rect.center

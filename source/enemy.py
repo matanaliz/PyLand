@@ -24,13 +24,18 @@ class Enemy(pygame.sprite.Sprite):
 
     def __init__(self, player_obj, pos=(0, 0)):
         pygame.sprite.Sprite.__init__(self)
-
         assert isinstance(player_obj, Player)
 
         self.size = (32, 32)
-        self.image = pygame.Surface(self.size)
+
+        #Transparent surface
+        self.image = pygame.Surface(self.size, pygame.SRCALPHA, 32)
+        self.image.convert_alpha()
         self.rect = pygame.Rect(pos[0], pos[1], *self.size)
-        self.image.fill(pygame.Color("#fff000"))
+
+        pygame.draw.rect(self.image, pygame.Color("#fff000"), pygame.Rect(0, 0, 32, 32))
+        #Saving base image for rotation
+        self.base_image = self.image
 
         self.player = player_obj
 
@@ -42,6 +47,9 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self):
         direction = normalize(sub(self.player.rect.center, self.get_pos()))
+
+        #Rotating to face player
+        self.__rotate(angle(direction))
         self.rect.move_ip(*[x * self.SPEED for x in direction])
 
     def apply_damage(self, damage):
@@ -54,6 +62,13 @@ class Enemy(pygame.sprite.Sprite):
     def attack(self):
         #TODO: Melee damage colldown
         return self.MELEE_DAMAGE
+
+    def __rotate(self, angle):
+        """rotate an image while keeping its center and size"""
+        orig_rect = self.rect
+        self.image = pygame.transform.rotate(self.base_image, angle)
+        self.rect = self.image.get_rect()
+        self.rect.center = orig_rect.center
 
 
 class YellowAlien(Enemy):
