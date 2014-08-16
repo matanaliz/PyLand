@@ -17,8 +17,13 @@ class Gui(object):
 
         self.score = Score(self.font)
         self.health_bar = HealthBar()
+
         self.reloading_progress = ReloadingProgress()
+        self.reloading_progress.font = self.font
+
+        #Charger clip init
         self.charger_clip = ChargerClip()
+        self.charger_clip.font = self.font
 
         self.update_list = [
             self.score,
@@ -59,7 +64,7 @@ class Score(object):
         self.score = 0
 
     def on_score_got(self, event):
-        assert isinstance(event.data, object)
+        assert isinstance(event.data, int)
         self.score += event.data
 
     def update(self):
@@ -99,25 +104,30 @@ class ReloadingProgress(object):
     """
 
     def __init__(self):
-        """
-        """
-        pass
+        self.font = None
+        self.reloading = False
+        self.counter = 0
 
     def update(self):
-        """
-        Updates reloading sprite (sidebar with percentage)
-        """
-        pass
+        if self.reloading:
+            if self.counter:
+                # TODO Set appropriate coordinates
+                reload_text = self.font.render("Reloading", 1, (255, 255, 255))
+                pygame.display.get_surface().blit(reload_text, (100, 400))
+                self.counter -= 1
+            else:
+                self.reloading = False
+
 
     def on_reload_start(self, event):
         """
         Event handler method
         :param event: event from weapon
         """
-        #TODO Implement
         assert isinstance(event, GameEvent)
         assert isinstance(event.data, Weapon)
-
+        self.reloading = True
+        self.counter = event.data.RELOAD_TIME
 
 
 class ChargerClip(object):
@@ -126,12 +136,16 @@ class ChargerClip(object):
     """
 
     def __init__(self):
-        pass
+        self.font = None
+        self.curr_ammo = 0
 
     def update(self):
-        pass
+        # TODO Set appropriate coordinates
+        score_text = self.font.render(str(self.curr_ammo), 1, (255, 255, 255))
+        pygame.display.get_surface().blit(score_text, (100, 500))
 
     def on_ammo_shot(self, event):
         #TODO Implement
         assert isinstance(event, GameEvent)
         assert isinstance(event.data, Weapon)
+        self.curr_ammo = event.data.shots

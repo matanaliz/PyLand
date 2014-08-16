@@ -105,7 +105,7 @@ class Weapon(object):
             self.bullet_group.add(bullet)
 
     def can_shoot(self):
-        if self.shots <= self.CAPACITY:
+        if self.shots < self.CAPACITY:
             if not self.bullet_reloading:
                 self.shots += 1
                 self.bullet_reloading = True
