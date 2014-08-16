@@ -34,4 +34,4 @@ def angle(v):
 
 def mul(v, c):
     assert isinstance(c, (float, int))
-    return [_ * c for _ in v]
+    return [i * c for i in v]

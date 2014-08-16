@@ -74,7 +74,7 @@ class HealthBar(object):
     def __init__(self):
         self.size = (200, 50)
         self.image = pygame.Surface(self.size)
-        self.image.fill(pygame.Color("#ffffff"))
+        self.image.fill(pygame.Color("#00ff00"))
 
         self.max_health = 0
 
@@ -86,9 +86,8 @@ class HealthBar(object):
             self.max_health = event.data.MAX_HEALTH
 
         curr_width = int(self.size[0] * event.data.curr_health / self.max_health)
-        self.image = pygame.Surface((curr_width, self.size[1]))
-        #TODO change color with health percentage
-        self.image.fill(pygame.Color("#ffffff"))
+        self.image.fill(pygame.Color("#ff0000"))
+        pygame.draw.rect(self.image, pygame.Color("#00ff00"), pygame.Rect(0, 0, curr_width, self.size[1]))
 
     def update(self):
         pygame.display.get_surface().blit(self.image, (5, 5))

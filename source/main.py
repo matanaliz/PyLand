@@ -40,8 +40,8 @@ class Game(object):
             self.clock.tick(self.fps)
             self.screen.fill(pygame.Color("#3d863d"))
 
-            self.gui.update()
             self.entities.update()
+            self.gui.update()
 
             pygame.display.flip()
 

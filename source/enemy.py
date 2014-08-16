@@ -56,15 +56,17 @@ class Enemy(pygame.sprite.Sprite):
 
         #Rotating to face player
         self.__rotate(angle(direction))
+        self.rect.center = self.curr_pos
 
-        if self.foe_group:
-            self.foe_group.remove(self)
-
-            foe = pygame.sprite.spritecollideany(self, self.foe_group)
-            if foe is None:
-                self.rect.center = self.curr_pos
-
-            self.foe_group.add(self)
+        # Collision handling mechanism works not properly
+        # if self.foe_group:
+        #     self.foe_group.remove(self)
+        #
+        #     foe = pygame.sprite.spritecollideany(self, self.foe_group)
+        #     if foe is None:
+        #         self.rect.center = self.curr_pos
+        #
+        #     self.foe_group.add(self)
 
     def apply_damage(self, damage):
         if self.HEALTH > damage:
