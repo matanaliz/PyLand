@@ -41,7 +41,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.curr_pos = self.rect.center
 
-        self.foe_group = 0
+        self.foe_group = None
 
     def get_pos(self):
         return self.rect.center
@@ -50,9 +50,6 @@ class Enemy(pygame.sprite.Sprite):
         return self.BOUNTY
 
     def update(self):
-
-        pos = self.rect.center
-
         direction = normalize(sub(self.player.rect.center, self.get_pos()))
         move_vec = mul(direction, self.SPEED)
         self.curr_pos = add(self.curr_pos, move_vec)
@@ -80,10 +77,10 @@ class Enemy(pygame.sprite.Sprite):
         #TODO: Melee damage colldown
         return self.MELEE_DAMAGE
 
-    def __rotate(self, angle):
+    def __rotate(self, a):
         """rotate an image while keeping its center and size"""
         orig_rect = self.rect
-        self.image = pygame.transform.rotate(self.base_image, angle)
+        self.image = pygame.transform.rotate(self.base_image, a)
         self.rect = self.image.get_rect()
         self.rect.center = orig_rect.center
 
