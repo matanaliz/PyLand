@@ -29,3 +29,7 @@ def normalize(v):
 def angle(v):
     assert len(v) == 2
     return math.atan2(v[0], v[1]) * 180 / math.pi
+
+def mul(v, c):
+    #assert isinstance(c, object)
+    return [_ * c for _ in v]

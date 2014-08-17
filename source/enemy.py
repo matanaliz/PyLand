@@ -39,6 +39,8 @@ class Enemy(pygame.sprite.Sprite):
 
         self.player = player_obj
 
+        self.curr_pos = self.rect.center
+
     def get_pos(self):
         return self.rect.center
 
@@ -47,10 +49,13 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self):
         direction = normalize(sub(self.player.rect.center, self.get_pos()))
+        move_vec = mul(direction, self.SPEED)
+
+        self.curr_pos = add(self.curr_pos, move_vec)
 
         #Rotating to face player
         self.__rotate(angle(direction))
-        self.rect.move_ip(*[x * self.SPEED for x in direction])
+        self.rect.center = self.curr_pos
 
     def apply_damage(self, damage):
         if self.HEALTH > damage:
