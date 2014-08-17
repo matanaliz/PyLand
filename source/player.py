@@ -10,7 +10,9 @@ class Player(pygame.sprite.Sprite):
     """
     Player class. I think it's self explaining.
     """
-    SPEED = 3.5
+    MIN_SPEED = 2.5
+    MAX_SPEED = 3.5
+    ACCELERATION = 0.1
     MAX_HEALTH = 100
 
     def __init__(self, bound):
@@ -18,8 +20,6 @@ class Player(pygame.sprite.Sprite):
 
         #Sprite init
         self.size = (32, 32)
-        #self.image = pygame.Surface(self.size)
-        #self.image.fill((0, 0, 0))
 
         #Transparent surface
         self.image = pygame.Surface(self.size, pygame.SRCALPHA, 32)
@@ -31,7 +31,8 @@ class Player(pygame.sprite.Sprite):
 
         self.rect = pygame.Rect(bound.width / 2, bound.height / 2, *self.size)
 
-        self.vector = (0, 0)
+        self.speed = 0
+        self.vector = [0, 0]
         self.bound = bound
 
         #Event dispatcher
@@ -64,16 +65,22 @@ class Player(pygame.sprite.Sprite):
         """
 
         #TODO: Change for action map
+        #Ugly code. Should move to base class for enemies and player.
         keys = pygame.key.get_pressed()
         vector = [0, 0]
+        key_was_pressed = False
         if keys[pygame.K_LEFT]:
             vector[0] = -1
+            key_was_pressed = True
         if keys[pygame.K_RIGHT]:
             vector[0] = 1
+            key_was_pressed = True
         if keys[pygame.K_UP]:
             vector[1] = -1
+            key_was_pressed = True
         if keys[pygame.K_DOWN]:
             vector[1] = 1
+            key_was_pressed = True
 
         #Tick for gun
         self.weapon.tick()
@@ -87,7 +94,13 @@ class Player(pygame.sprite.Sprite):
             if self.weapon:
                 self.weapon.fire(mouse_pos)
 
-        self.rect.move_ip(*[x * self.SPEED for x in vector])
+        self.__apply_acceleration(key_was_pressed)
+
+        if key_was_pressed:
+            self.vector = vector
+            self.rect.move_ip(*[x * self.speed for x in vector])
+        else:
+            self.rect.move_ip(*[x * self.speed for x in self.vector])
         self.rect.clamp_ip(self.bound)
 
     def apply_damage(self, damage):
@@ -111,3 +124,11 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.base_image, angle)
         self.rect = self.image.get_rect()
         self.rect.center = orig_rect.center
+
+    def __apply_acceleration(self, key_was_pressed):
+        if key_was_pressed:
+            if self.speed < self.MAX_SPEED:
+                self.speed += self.ACCELERATION
+        else:
+            if self.speed > 0:
+                self.speed -= self.ACCELERATION
