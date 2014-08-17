@@ -33,13 +33,15 @@ class Enemy(pygame.sprite.Sprite):
         self.image.convert_alpha()
         self.rect = pygame.Rect(pos[0], pos[1], *self.size)
 
-        pygame.draw.rect(self.image, pygame.Color("#fff000"), pygame.Rect(0, 0, 32, 32))
+        pygame.draw.rect(self.image, pygame.Color("#fff000"), pygame.Rect(0, 0, *self.size))
         #Saving base image for rotation
         self.base_image = self.image
 
         self.player = player_obj
 
         self.curr_pos = self.rect.center
+
+        self.foe_group = 0
 
     def get_pos(self):
         return self.rect.center
@@ -48,14 +50,24 @@ class Enemy(pygame.sprite.Sprite):
         return self.BOUNTY
 
     def update(self):
+
+        pos = self.rect.center
+
         direction = normalize(sub(self.player.rect.center, self.get_pos()))
         move_vec = mul(direction, self.SPEED)
-
         self.curr_pos = add(self.curr_pos, move_vec)
 
         #Rotating to face player
         self.__rotate(angle(direction))
-        self.rect.center = self.curr_pos
+
+        if self.foe_group:
+            self.foe_group.remove(self)
+
+            foe = pygame.sprite.spritecollideany(self, self.foe_group)
+            if foe is None:
+                self.rect.center = self.curr_pos
+
+            self.foe_group.add(self)
 
     def apply_damage(self, damage):
         if self.HEALTH > damage:

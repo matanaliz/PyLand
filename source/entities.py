@@ -49,14 +49,18 @@ class Entities(object):
 
         screen_rect = pygame.display.get_surface().get_rect()
 
-        #Generating enemies out of screen
-        h_range = range(-200, 0) + range(screen_rect.height, screen_rect.height + 200)
-        w_range = range(-200, 0) + range(screen_rect.width, screen_rect.width + 200)
-
         #Adding more same enemies with waves
         for i in range(self.count + (self.wave * 2)):
-            self.foe_group.add(
-                Enemy(self.player, (random.choice(h_range), random.choice(w_range))))
+            pos = (self.random_two_period(-200, 0, screen_rect.height, screen_rect.height + 200),
+                   self.random_two_period(-200, 0, screen_rect.height, screen_rect.height + 200))
+            enemy = Enemy(self.player, pos)
+            enemy.foe_group = self.foe_group
+            if not pygame.sprite.spritecollideany(enemy, self.foe_group):
+                self.foe_group.add(enemy)
+
+    @staticmethod
+    def random_two_period(start1, end1, start2, end2):
+        return random.choice([random.randint(start1, end1), random.randint(start2, end2)])
 
     def check_for_collision(self):
         #Check player collision

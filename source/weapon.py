@@ -9,7 +9,6 @@ from event import *
 
 class Bullet(pygame.sprite.Sprite):
 
-    #TODO: Should be for custom image
     SPEED = 10.0
     MAX_RANGE = 1000
     DAMAGE = 15
@@ -28,11 +27,11 @@ class Bullet(pygame.sprite.Sprite):
         self.path = 0
 
         self.age = 1
-        self.speed = self.SPEED + random.uniform(-1.0, 1.0)
+        self._speed = self.SPEED + random.uniform(-1.0, 1.0)
 
     def update(self):
         self.age += 1
-        self.new_pos = [x * self.speed * self.age for x in self.direction]
+        self.new_pos = [x * self._speed * self.age for x in self.direction]
         self.path = magnitude(self.new_pos)
 
         self.rect.center = add(self.origin_center, self.new_pos)
@@ -48,7 +47,9 @@ class Bullet(pygame.sprite.Sprite):
 
     def set_speed(self, speed):
         self.SPEED = speed
-        self.speed = self.SPEED + random.uniform(-2.0, 2.0)
+        self._speed = self.SPEED + random.uniform(-2.0, 2.0)
+
+    speed = property(fset=set_speed)
 
     def set_range(self, max_path):
         self.MAX_RANGE = max_path
@@ -99,8 +100,8 @@ class Weapon(object):
             direction = normalize(sub(where, self.get_pos()))
             #Creating bullet of custom class
             bullet = self.bullet_cls(self.bullet_group, direction, self.get_pos())
-            bullet.set_speed(self.BULLET_SPEED)
-            bullet.set_range(self.BULLET_RANGE)
+            bullet.speed = self.BULLET_SPEED
+            bullet.speed = self.BULLET_RANGE
             self.bullet_group.add(bullet)
 
     def can_shoot(self):
