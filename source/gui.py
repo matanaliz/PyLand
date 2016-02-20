@@ -21,7 +21,7 @@ class Gui(object):
         self.reloading_progress = ReloadingProgress()
         self.reloading_progress.font = self.font
 
-        #Charger clip init
+        # Charger clip init
         self.charger_clip = ChargerClip()
         self.charger_clip.font = self.font
 
@@ -42,14 +42,14 @@ class Gui(object):
         assert isinstance(event_dispatcher, EventDispatcher)
         self.event_dispatcher = event_dispatcher
 
-        #Registering listeners for events
+        # Registering listeners for events
         self.event_dispatcher.add_event_listener(GameEvent.RELOAD_START, self.reloading_progress.on_reload_start)
         self.event_dispatcher.add_event_listener(GameEvent.DAMAGE_GOT, self.health_bar.on_damage_got)
         self.event_dispatcher.add_event_listener(GameEvent.AMMO_SHOT, self.charger_clip.on_ammo_shot)
         self.event_dispatcher.add_event_listener(GameEvent.SCORE_GOT, self.score.on_score_got)
 
     def update(self):
-        #Update all
+        # Update all
         for obj in self.update_list:
             obj.update()
 
@@ -117,7 +117,6 @@ class ReloadingProgress(object):
                 self.counter -= 1
             else:
                 self.reloading = False
-
 
     def on_reload_start(self, event):
         """

@@ -63,30 +63,29 @@ class Entities(object):
         return random.choice([random.randint(start1, end1), random.randint(start2, end2)])
 
     def check_for_collision(self):
-        #Check player collision
+        # Check player collision
         foe = pygame.sprite.spritecollideany(self.player, self.foe_group)
         if foe is not None:
-            #Do something if player is dead
+            # Do something if player is dead
             self.player.apply_damage(foe.attack())
         else:
             collision_dict = pygame.sprite.groupcollide(self.bullet_group, self.foe_group, False, False)
-            for bullet, foes in collision_dict.iteritems():
+            for bullet, foes in collision_dict.items():
                 for foe in foes:
                     if foe.apply_damage(bullet.get_damage()):
-                        #Dispatch event to health bar
+                        # Dispatch event to health bar
                         if self.event_dispatcher:
                             self.event_dispatcher.dispatch_event(GameEvent(GameEvent.SCORE_GOT, foe.get_score()))
                         foe.kill()
 
-                    #Bullet is removed if was collided
+                    # Bullet is removed if was collided
                     bullet.kill()
 
     def update(self):
-
-        #Check for collisions
+        # Check for collisions
         self.check_for_collision()
         if len(self.foe_group) <= 1:
-            #Generate more enemies.
+            # Generate more enemies.
             self.generate_foes()
 
         screen = pygame.display.get_surface()
@@ -100,4 +99,3 @@ class Entities(object):
         self.foe_group.update()
         self.foe_group.draw(screen)
 
-        #Generate foes
